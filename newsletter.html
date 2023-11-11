@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="utf-8" />
+   <title>My News-Letter Form</title>
+   <style>
+     .error {
+       border: 2px solid red;
+     }
+   </style>
+</head>
+<body>
+   <h1 style="text-align:center;">Newsletter Sign-Up</h1>
+   <form name="MyForm" method="post" action="thankyou.html">
+     <div style="text-align:center;">
+       <input type="text" name="fullname" placeholder="Your name" maxlength="20">
+       <input type="text" name="email" placeholder="Your email" maxlength="30">
+       <input type="text" name="PhoneNumber" placeholder="Your phone number" maxlength="15">
+       <input type="submit" name="submit" value="Submit" onClick="javascript:return validateInputs();">
+     </div>
+   </form>
+   <script>
+     function validateInputs() {
+       var SubmitForm = true;
+       var FormErrors = "";
+
+       var fullname = document.MyForm.fullname.value.trim();
+       var email = document.MyForm.email.value.trim();
+       var PhoneNumber = document.MyForm.PhoneNumber.value.trim();
+
+       if (fullname.length < 1 || email.length < 1 || PhoneNumber.length < 1) {
+         FormErrors = "All fields are mandatory. Please complete the form.";
+         SubmitForm = false;
+       } else {
+         var filter = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+
+         if (!filter.test(email)) {
+           FormErrors = "Your form contains invalid field entries. Please correct your form before submitting";
+           SubmitForm = false;
+         }
+
+         const isValidPhoneNumber = /^[0-9-]+$/.test(PhoneNumber);
+
+         const PhoneNumberError = document.getElementById("Phone-number-error");
+         if (!isValidPhoneNumber) {
+           FormErrors = "Invalid phone number. Please use only numbers and dashes.";
+           document.MyForm.PhoneNumber.classList.add("error");
+           SubmitForm = false;
+         } else {
+           PhoneNumberError.textContent = "";
+           document.MyForm.PhoneNumber.classList.remove("error");
+         }
+       }
+
+       if (SubmitForm == false) {
+         alert(FormErrors);
+         return false;
+       } else {
+         fullname = fullname.replace(/[^a-z0-9\s\-]/gim, "");
+         email = email.replace(/[^a-z0-9_@.-]/gim, "");
+         PhoneNumber = PhoneNumber.replace(/[^\d-]/gim, "");
+
+         document.MyForm.submit();
+       }
+     }
+   </script>
+</body>
+</html>
